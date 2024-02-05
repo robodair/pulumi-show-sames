@@ -2,43 +2,25 @@
 
 rm -rf logs
 
-echo "=== child resources, dependencies, parent state, preview duration ==="
+echo "stack size, dependencies per child, preview duration"
 
 preview(){
     export LOGDIR=logs/${NUM_CHILD_RESOURCES}-${DO_PARENT}
     mkdir -p $LOGDIR
-    echo -n "$NUM_CHILD_RESOURCES, $NUM_DEPENDENCIES, $DO_PARENT, "
-    /bin/time --format="%e seconds" pulumi preview > ${LOGDIR}/${NUM_DEPENDENCIES}-deps.log
+    echo -n "$NUM_CHILD_RESOURCES, $NUM_DEPENDENCIES, "
+    /bin/time --format="%e" pulumi preview > ${LOGDIR}/${NUM_DEPENDENCIES}-deps.log
 
 }
 
 export DO_PARENT=false
 
-echo "=== 0 child resources ==="
-export NUM_CHILD_RESOURCES=0
-export NUM_DEPENDENCIES=0
-preview
-
-for NUM_CHILD_RESOURCES in {100..1000..100};
+for NUM_CHILD_RESOURCES in {0..1000..100};
 do
 
     export NUM_CHILD_RESOURCES
+    echo "=== stack size: 100 base + $NUM_CHILD_RESOURCES children ==="
 
-    echo "=== ${NUM_CHILD_RESOURCES} child resources ==="
-
-    for NUM_DEPENDENCIES in {0..1};
-    do
-        export NUM_DEPENDENCIES
-        preview
-    done
-
-    for NUM_DEPENDENCIES in {10..20..10};
-    do
-        export NUM_DEPENDENCIES
-        preview
-    done
-
-    for NUM_DEPENDENCIES in {50..100..50};
+    for NUM_DEPENDENCIES in {0..20};
     do
         export NUM_DEPENDENCIES
         preview
