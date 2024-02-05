@@ -1,0 +1,6 @@
+name: pulumi-show-sames-diag
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: Demonstrate sames being shown in noninteractive up
